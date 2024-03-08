@@ -7,7 +7,7 @@ import Env from "./utils/Env/Env"
 AppDataSource.initialize()
     .then(async () => {
         const app = express()
-        const PORT = Env.EXPRESS_DB_PORT
+        const PORT = Env.EXPRESS_PORT
         app.use(cors())
 
         app.use(express.json())
