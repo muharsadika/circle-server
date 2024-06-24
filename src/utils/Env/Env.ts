@@ -14,7 +14,6 @@ export default class Env {
   static EXPRESS_SUBSCRIBERS: string = process.env.EXPRESS_SUBSCRIBERS
 
   static EXPRESS_JWT_SECRET_KEY: string = process.env.EXPRESS_JWT_SECRET_KEY
-  // static EXPRESS_JWT_EXPIRED_TIME: number = parseInt(process.env.EXPRESS_JWT_EXPIRED_TIME)
   static EXPRESS_JWT_EXPIRED_TIME: string = process.env.EXPRESS_JWT_EXPIRED_TIME
 
   static EXPRESS_PORT: string = process.env.EXPRESS_PORT
