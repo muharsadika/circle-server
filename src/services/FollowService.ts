@@ -9,29 +9,28 @@ export default new class FollowService {
 
     async followUser(req: Request, res: Response): Promise<Response> {
         try {
-            const userId = res.locals.loginSession.user.id; // Pengguna yang melakukan tindakan follow
-
-            const { user_id } = req.body;
-
+            const userId = res.locals.loginSession.user.id;
+            const { id } = req.body;
+            
             const { error } = FollowSchema.validate(req.body);
 
             if (error) {
-                return res.status(400).json({ code: 400, message: 'Invalid input. Please provide a valid user_id.' });
+                return res.status(400).json({ code: 400, message: 'Invalid input. Please provide a valid id.' });
             }
 
             const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['following'] });
-            const userToFollow = await this.userRepository.findOne({where: { id: user_id }});
+            const userToFollow = await this.userRepository.findOne({where: { id: id }});
 
             if (!user || !userToFollow) {
                 return res.status(404).json({ code: 404, message: 'User not found' });
             }
 
             // Check if the user is already following the target user
-            const isAlreadyFollowing = user.following.some((followedUser) => followedUser.id === user_id);
+            const isAlreadyFollowing = user.following.some((followedUser) => followedUser.id === id);
 
             if (isAlreadyFollowing) {
                 // If already following, unfollow
-                user.following = user.following.filter((followedUser) => followedUser.id !== user_id);
+                user.following = user.following.filter((followedUser) => followedUser.id !== id);
             } else {
                 // If not following, follow
                 user.following.push(userToFollow);
@@ -96,7 +95,7 @@ export default new class FollowService {
 //     async followUser(req: Request, res: Response): Promise<Response> {
 //         try {
 //             const userId = res.locals.loginSession.user.id; // Pengguna yang melakukan tindakan follow
-//             const userToFollowId = req.body.user_id; // ID pengguna yang ingin diikuti
+//             const userToFollowId = req.body.id; // ID pengguna yang ingin diikuti
 
 //             const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['following'] });
 //             const userToFollow = await this.userRepository.findOne({ where: { id: userToFollowId } });
@@ -158,7 +157,7 @@ export default new class FollowService {
 //     async followUser(req: Request, res: Response): Promise<Response> {
 //         try {
 //             const userId = res.locals.loginSession.user.id; // Pengguna yang melakukan tindakan follow
-//             const userToFollowId = Number(req.body.user_id); // ID pengguna yang ingin diikuti
+//             const userToFollowId = Number(req.body.id); // ID pengguna yang ingin diikuti
 
 //             const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['users'] });
 //             const userToFollow = await this.userRepository.findOne({ where: { id: userToFollowId } });
